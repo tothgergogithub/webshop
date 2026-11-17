@@ -9,19 +9,31 @@
 </head>
 <body>
     <h1>Webshopapi</h1>
-    <div class="container-fluid">
-        <table id="data" class="table table-striped">
-            <thead>
-                <tr class="table-dark">
-                    <th scope="col">Name</th>
-                    <th scope="col">Email</th>
-                    <th scope="col">City</th>
-                    <th scope="col">Phone</th>
-                    <th scope="col">Role</th>
-                </tr>
-            </thead>
-        </table>
+    <div class="container-fluid" d-flex justify-content-center p-4 flex-column align-items-center gap-2 w-25>
+        <table id="data" class="table table-striped table-dark">
+    <thead>
+        <tr class="table-dark">
+            <th scope="col">Name</th>
+            <th scope="col">Email</th>
+            <th scope="col">City</th>
+            <th scope="col">Phone</th>
+            <th scope="col">Role</th>
+        </tr>
+    </thead>
+    <tbody id="tbody"></tbody>
+</table>
+<label for="cim">Új User hozzáadása</label>
+    <input type="text" id="nev" placeholder="Név">
+    <input type="text" id="email" placeholder="Email-cím">
+    <input type="text" id="varos" placeholder="Város">
+    <input type="number" id="telefonszam" placeholder="Telefonszám">
+    <input type="text" id="szerep" placeholder="Szerep">
+    
+ 
+    <button id="hozzaad" type="button" onclick="hozzaadUser()">Hozzáad</button>
+    
     </div>
+    <button id="modosít" type="button" onclick=""></button>
     <script type="module" src="https://cdn.jsdelivr.net/npm/bootstrap@6.0.0-alpha.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-1a/pXj49ZQ1aHEmrJ+gMw1otqoVsYwlEnlD8mIfY2TV03r20Y0CN7uqx1tQogjPL" crossorigin="anonymous"></script>  
     <script src="app.js"></script>
 </body>
