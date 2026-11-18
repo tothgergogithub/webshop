@@ -1,37 +1,91 @@
+const url = "http://localhost:3000/users";
+let felhasznalok = [];
+let szerkesztettId = null;
 
+function betolt() {
+  fetch(url)
+    .then(function (response) {
+      return response.json();
+    })
+    .then(function (data) {
+      felhasznalok = data;
+      let tbody = document.getElementById("tbody");
+      let szoveg = "";
 
-function betolt(){
-fetch("http://localhost:3000/users")
-.then(function (response) {
-    return response.json();
-  })
-  .then(function (data) {
-    console.log(data);
+      for (let i = 0; i < data.length; i++) {
+        szoveg += `
+          <tr class="table-dark">
+            <td>${data[i].name}</td>
+            <td>${data[i].email}</td>
+            <td>${data[i].city}</td>
+            <td>${data[i].phone}</td>
+            <td>${data[i].role}</td>
+            <td>
+              <button type="button" class="btn btn-warning btn-sm" onclick="szerkeszt(${data[i].id})">Módosítás</button>
+              <button type="button" class="btn btn-danger btn-sm" onclick="torolUser(${data[i].id})">Törlés</button>
+            </td>
+          </tr>
+        `;
+      }
 
-    let tbody = document.getElementById("tbody");
-    let szoveg = "";
+      tbody.innerHTML = szoveg;
+    })
+    .catch(function (error) {
+      console.error("Hiba:", error);
+    });
+}
 
-    for (let i = 0; i < data.length; i++) {
-      szoveg += `
-      <tr class="table-dark">
-            <th scope="col">${data[i].name}</th>
-            <th scope="col">${data[i].email}</th>
-            <th scope="col">${data[i].city}</th>
-            <th scope="col">${data[i].phone}</th>
-            <th scope="col">${data[i].role}</th>
-        </tr>
-      `
-    }
+  function torolUser(id) {
+    
 
-    tbody.innerHTML = szoveg;
-  })
-  .catch(function (error) {
-    console.error("Hiba:", error);
+    fetch(url + "/" + id, {
+      method: "DELETE"
+    })
+      .then(function (response) {
+        if (!response.ok) {
+          alert("A törlés nem sikerült.");
+          return;
+        }
+        betolt();
+      })
+      .catch(function (error) {
+        console.error("Hiba:", error);
+      });
+  }
+
+function szerkeszt(id) {
+ 
+  let user = felhasznalok.find(function (u) {
+    return String(u.id) === String(id);
   });
+  if (!user) return;
+
+  szerkesztettId = user.id;
+
+  document.getElementById("nev").value = user.name;
+  document.getElementById("email").value = user.email;
+  document.getElementById("varos").value = user.city;
+  document.getElementById("telefonszam").value = user.phone;
+  document.getElementById("szerep").value = user.role;
+
+  document.getElementById("mentesGomb").textContent = "Módosítás mentése";
+  document.getElementById("megseGomb").style.display = "inline-block";
+}
+
+function urlapTorles() {
+  document.getElementById("nev").value = "";
+  document.getElementById("email").value = "";
+  document.getElementById("varos").value = "";
+  document.getElementById("telefonszam").value = "";
+  document.getElementById("szerep").value = "";
+
+  szerkesztettId = null;
+  document.getElementById("mentesGomb").textContent = "Hozzáad";
+  document.getElementById("megseGomb").style.display = "none";
+}
 
 
-  function hozzaadUser(){
-    function hozzaadUser() {
+function hozzaadUser() {
   let nev = document.getElementById("nev").value;
   let email = document.getElementById("email").value;
   let varos = document.getElementById("varos").value;
@@ -51,8 +105,16 @@ fetch("http://localhost:3000/users")
     role: szerep
   };
 
-  fetch(url, {
-    method: "POST",
+  let mentendoUrl = url;
+  let metodus = "POST";
+
+  if (szerkesztettId !== null) {
+    mentendoUrl = url + "/" + szerkesztettId;
+    metodus = "PUT";
+  }
+
+  fetch(mentendoUrl, {
+    method: metodus,
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(ujUser)
   })
@@ -61,11 +123,7 @@ fetch("http://localhost:3000/users")
         alert("A szerver hibát adott: " + response.status);
         return;
       }
-      document.getElementById("nev").value = "";
-      document.getElementById("email").value = "";
-      document.getElementById("varos").value = "";
-      document.getElementById("telefonszam").value = "";
-      document.getElementById("szerep").value = "";
+      urlapTorles();
       betolt();
     })
     .catch(function (error) {
@@ -73,7 +131,4 @@ fetch("http://localhost:3000/users")
     });
 }
 
-}
-}
-betolt()
-
+betolt(); 
