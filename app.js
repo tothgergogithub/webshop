@@ -14,15 +14,15 @@ function betolt() {
 
       for (let i = 0; i < data.length; i++) {
         szoveg += `
-          <tr class="table-dark">
+          <tr>
             <td>${data[i].name}</td>
             <td>${data[i].email}</td>
             <td>${data[i].city}</td>
             <td>${data[i].phone}</td>
             <td>${data[i].role}</td>
             <td>
-              <button type="button" class="btn btn-warning btn-sm" onclick="szerkeszt(${data[i].id})">Módosítás</button>
-              <button type="button" class="btn btn-danger btn-sm" onclick="torolUser(${data[i].id})">Törlés</button>
+              <button type="button" class="btn btn-outline-primary btn-sm" onclick="szerkeszt(${data[i].id})">Módosítás</button>
+              <button type="button" class="btn btn-outline-danger btn-sm" onclick="torolUser(${data[i].id})">Törlés</button>
             </td>
           </tr>
         `;
